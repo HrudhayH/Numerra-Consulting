@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ChevronRight, Shield, Scale, Building2, FileCheck, Gavel, BarChart3, BookOpen, Calculator, FileSpreadsheet, Lightbulb, Users } from "lucide-react";
-import { motion } from "framer-motion";
+import { ArrowRight, Shield, Scale, Building2, FileCheck, Gavel, BarChart3, BookOpen, Calculator, FileSpreadsheet, Lightbulb, Users } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { Badge } from "@/components/ui/Badge";
-import { StatCounter } from "@/components/ui/StatCounter";
+import { SovereignCTA } from "@/components/ui/SovereignCTA";
 
 const complianceCards = [
   {
@@ -92,6 +93,8 @@ const services = [
 ];
 
 export default function HomePage() {
+  const [activeService, setActiveService] = useState(0);
+
   return (
     <>
       {/* ==================== HERO SECTION ==================== */}
@@ -148,7 +151,7 @@ export default function HomePage() {
                 className="mt-10 flex flex-wrap gap-4"
               >
                 <Link
-                  href="/contact"
+                  href="/free-consultation"
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-indigo-deep text-white font-[family-name:var(--font-body)] font-semibold text-xs tracking-widest uppercase hover:bg-indigo-dark transition-all duration-300 shadow-xl shadow-indigo-deep/20 hover:shadow-2xl hover:shadow-indigo-deep/30 hover:-translate-y-0.5"
                   id="hero-cta-primary"
                 >
@@ -209,50 +212,120 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ==================== COMPLIANCE AWARENESS ==================== */}
+      {/* ==================== COMPLIANCE AWARENESS — Asymmetric Layout ==================== */}
       <section className="py-20 lg:py-32" id="compliance">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <Badge variant="gold">Did You Know?</Badge>
-            <h2 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-[family-name:var(--font-display)] text-text-primary leading-tight">
-              Accounting Isn&apos;t Optional.{" "}
-              <span className="gradient-text">It&apos;s the Law.</span>
-            </h2>
-            <p className="mt-4 text-lg text-text-secondary leading-relaxed">
-              Whether you&apos;re a freelancer, startup, or established enterprise
-              — Indian law requires you to maintain proper financial records.
-            </p>
-          </AnimatedSection>
-
-          {/* Compliance Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {complianceCards.map((card, index) => (
-              <AnimatedSection key={card.title} delay={index * 0.1}>
-                <div className="group h-full p-6 lg:p-8 rounded-2xl bg-surface border border-border hover:border-indigo-deep/20 hover:shadow-xl hover:shadow-indigo-deep/5 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-deep/5 flex items-center justify-center group-hover:bg-indigo-deep/10 transition-colors">
-                      <card.icon
-                        size={20}
-                        className="text-indigo-deep"
-                      />
-                    </div>
-                    <span className="text-[10px] font-[family-name:var(--font-body)] font-bold tracking-widest uppercase text-gold-dark">
-                      {card.badge}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-[family-name:var(--font-display)] text-text-primary mb-3">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm text-text-secondary leading-relaxed">
-                    {card.description}
+          {/* Sovereign Staggered Layout for Compliance Cards */}
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16">
+            
+            {/* Left Anchor Column (Sticky) */}
+            <div className="lg:w-[45%] flex flex-col">
+              <div className="sticky top-32">
+                <AnimatedSection>
+                  <Badge variant="gold">Did You Know?</Badge>
+                  <h2 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-[family-name:var(--font-display)] text-text-primary leading-tight">
+                    Accounting Isn&apos;t Optional.{" "}
+                    <span className="gradient-text">It&apos;s the Law.</span>
+                  </h2>
+                  <p className="mt-4 text-lg text-text-secondary leading-relaxed mb-10">
+                    Whether you&apos;re a freelancer, startup, or established enterprise
+                    — Indian law requires you to maintain proper financial records.
                   </p>
-                </div>
-              </AnimatedSection>
-            ))}
+                </AnimatedSection>
+
+                {/* Featured Anchor Card */}
+                <AnimatedSection delay={0.1}>
+                  {(() => {
+                    const FeaturedIcon = complianceCards[0].icon;
+                    return (
+                      <div className="group relative overflow-hidden rounded-3xl bg-indigo-deep p-8 lg:p-10 text-white transition-all duration-500 shadow-2xl shadow-indigo-deep/30">
+                        <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3" />
+                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-gold/10 rounded-full blur-2xl -translate-x-1/4 translate-y-1/4" />
+
+                        <div className="relative z-10">
+                          <div className="flex items-center gap-3 mb-6">
+                            <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
+                              <FeaturedIcon size={24} className="text-gold" />
+                            </div>
+                            <span className="text-[10px] font-[family-name:var(--font-body)] font-bold tracking-widest uppercase text-gold">
+                              {complianceCards[0].badge}
+                            </span>
+                          </div>
+                          <h3 className="text-2xl font-[family-name:var(--font-display)] text-white mb-4 leading-tight">
+                            {complianceCards[0].title}
+                          </h3>
+                          <p className="text-white/80 leading-relaxed text-sm">
+                            {complianceCards[0].description}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </AnimatedSection>
+              </div>
+            </div>
+
+            {/* Right Ledger Column (Staggered Waterfall) */}
+            <div className="lg:w-[55%] grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+              {/* Left staggered column (Items 2, 4, 6) */}
+              <div className="flex flex-col gap-6 lg:gap-8">
+                {complianceCards.filter((_, i) => i !== 0 && i % 2 !== 0).map((card, idx) => (
+                  <AnimatedSection key={card.title} delay={0.2 + idx * 0.1}>
+                    <div 
+                      className="group p-8 rounded-3xl bg-white transition-all duration-500 hover:-translate-y-2 border border-transparent hover:border-indigo-deep/10" 
+                      style={{ boxShadow: '0 20px 60px -15px rgba(7,2,53,0.05)' }}
+                    >
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="w-12 h-12 rounded-xl bg-indigo-deep/5 flex items-center justify-center shrink-0 group-hover:bg-indigo-deep/10 transition-all duration-300">
+                          <card.icon size={22} className="text-indigo-deep" strokeWidth={1.5} />
+                        </div>
+                        <span className="text-[10px] font-[family-name:var(--font-body)] font-bold tracking-widest uppercase text-gold-dark/80 group-hover:text-gold-dark transition-colors duration-300">
+                          {card.badge}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-[family-name:var(--font-display)] text-text-primary mb-3 group-hover:text-indigo-deep transition-colors duration-300">
+                        {card.title}
+                      </h3>
+                      <p className="text-sm text-text-secondary leading-relaxed">
+                        {card.description}
+                      </p>
+                    </div>
+                  </AnimatedSection>
+                ))}
+              </div>
+              
+              {/* Right staggered column (Items 3, 5) */}
+              <div className="flex flex-col gap-6 lg:gap-8 lg:mt-16">
+                {complianceCards.filter((_, i) => i !== 0 && i % 2 === 0).map((card, idx) => (
+                  <AnimatedSection key={card.title} delay={0.3 + idx * 0.1}>
+                    <div 
+                      className="group p-8 rounded-3xl bg-white transition-all duration-500 hover:-translate-y-2 border border-transparent hover:border-indigo-deep/10" 
+                      style={{ boxShadow: '0 20px 60px -15px rgba(7,2,53,0.05)' }}
+                    >
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="w-12 h-12 rounded-xl bg-indigo-deep/5 flex items-center justify-center shrink-0 group-hover:bg-indigo-deep/10 transition-all duration-300">
+                          <card.icon size={22} className="text-indigo-deep" strokeWidth={1.5} />
+                        </div>
+                        <span className="text-[10px] font-[family-name:var(--font-body)] font-bold tracking-widest uppercase text-gold-dark/80 group-hover:text-gold-dark transition-colors duration-300">
+                          {card.badge}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-[family-name:var(--font-display)] text-text-primary mb-3 group-hover:text-indigo-deep transition-colors duration-300">
+                        {card.title}
+                      </h3>
+                      <p className="text-sm text-text-secondary leading-relaxed">
+                        {card.description}
+                      </p>
+                    </div>
+                  </AnimatedSection>
+                ))}
+              </div>
+            </div>
+
           </div>
 
-          {/* Compliance CTA */}
-          <AnimatedSection className="mt-12 text-center">
+          {/* Mobile compliance CTA */}
+          <AnimatedSection className="mt-10 text-center lg:hidden">
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gold/10 border border-gold/20">
               <Shield size={18} className="text-gold-dark" />
               <p className="text-sm font-medium text-gold-dark">
@@ -264,91 +337,134 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ==================== SERVICES PREVIEW ==================== */}
+      {/* ==================== SERVICES PREVIEW — Bento Mosaic ==================== */}
       <section className="py-20 lg:py-32 bg-surface" id="services-preview">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+          {/* Section Header */}
+          <AnimatedSection className="text-center mb-14 lg:mb-16">
             <Badge>What We Do</Badge>
             <h2 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-[family-name:var(--font-display)] text-text-primary leading-tight">
               Comprehensive Financial Services
             </h2>
-            <p className="mt-4 text-lg text-text-secondary leading-relaxed">
+            <p className="mt-4 text-lg text-text-secondary leading-relaxed max-w-2xl mx-auto">
               Everything your business needs to stay compliant, profitable, and
               growth-ready.
             </p>
           </AnimatedSection>
 
-          {/* Services Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <AnimatedSection key={service.title} delay={index * 0.08}>
-                <Link href="/services" className="block group h-full">
-                  <div className="h-full rounded-2xl border border-border bg-bg hover:bg-surface hover:border-indigo-deep/20 hover:shadow-xl hover:shadow-indigo-deep/5 transition-all duration-300 hover:-translate-y-1 overflow-hidden flex flex-col">
-                    <div className="relative h-48 w-full bg-indigo-deep/5">
-                      <Image
-                        src={service.image}
-                        alt={service.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/80 to-transparent" />
-                      <div className="absolute bottom-4 left-6 flex items-center justify-center w-12 h-12 rounded-xl bg-surface/90 backdrop-blur shadow-sm border border-white/10 group-hover:bg-indigo-deep group-hover:border-transparent transition-all duration-300 z-10">
-                        <service.icon size={22} className="text-indigo-deep group-hover:text-white transition-colors" />
-                      </div>
-                      <span className="absolute top-4 right-4 text-xs font-[family-name:var(--font-body)] font-bold text-white/50 bg-black/20 px-2 py-1 rounded backdrop-blur">
-                        {service.num}
-                      </span>
-                    </div>
-                    <div className="p-6 lg:p-8 flex-grow flex flex-col">
-                      <h3 className="text-xl font-[family-name:var(--font-display)] text-text-primary mb-3 group-hover:text-indigo-deep transition-colors">
-                        {service.title}
-                      </h3>
-                      <p className="text-sm text-text-secondary leading-relaxed flex-grow">
-                        {service.description}
-                      </p>
-                      <div className="mt-5 flex items-center gap-1 text-sm font-medium text-indigo-deep opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        Learn more <ArrowRight size={14} />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== BOTTOM CTA ==================== */}
-      <section className="py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <AnimatedSection>
-            <div className="relative overflow-hidden rounded-3xl indigo-gradient p-12 lg:p-20 text-center">
-              {/* Decorative Elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/10 rounded-full blur-2xl -translate-x-1/3 translate-y-1/3" />
-
-              <div className="relative z-10">
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-[family-name:var(--font-display)] text-white leading-tight">
-                  Stop Worrying About Compliance.
-                </h2>
-                <p className="mt-5 text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
-                  Partner with Numerra and get back to building your business —
-                  while we ensure every number is in its place.
-                </p>
-                <Link
-                  href="/contact"
-                  className="mt-8 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-indigo-deep font-semibold text-sm hover:bg-gold hover:text-white transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-0.5"
-                  id="home-bottom-cta"
+          {/* Interactive Sticky Media Split Layout */}
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+            
+            {/* Left Side: Sticky Media Viewer */}
+            <div className="w-full lg:w-5/12 h-[400px] lg:h-[600px] lg:sticky lg:top-32 rounded-[2rem] overflow-hidden bg-white shadow-2xl border border-border/50 relative">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeService}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="absolute inset-0"
                 >
-                  Schedule a Free Consultation
-                  <ArrowRight size={16} />
-                </Link>
+                  <Image
+                    src={services[activeService].image}
+                    alt={services[activeService].title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                  {/* Subtle gradient so the image isn't too raw */}
+                  <div className="absolute inset-0 bg-indigo-deep/5 mix-blend-multiply" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-bg/60 via-transparent to-transparent opacity-80" />
+                  
+                  {/* Floating Icon corresponding to active service */}
+                  <motion.div 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                    className="absolute bottom-8 left-8 w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-2xl text-gold"
+                  >
+                    {(() => {
+                      const ActiveIcon = services[activeService].icon;
+                      return <ActiveIcon size={32} strokeWidth={1.5} />;
+                    })()}
+                  </motion.div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Right Side: Interactive List */}
+            <div className="w-full lg:w-7/12 flex flex-col justify-center">
+              <div className="space-y-0">
+                {services.map((service, index) => {
+                  const isActive = activeService === index;
+                  return (
+                    <div
+                      key={service.title}
+                      onMouseEnter={() => setActiveService(index)}
+                      className="group cursor-pointer py-8 lg:py-10 border-b border-border/60 last:border-0 relative"
+                    >
+                      {/* Interactive subtle line indicator */}
+                      <div className={`absolute left-[-24px] top-0 bottom-0 w-[4px] bg-indigo-deep transition-all duration-500 ease-out ${isActive ? 'scale-y-100 opacity-100' : 'scale-y-0 opacity-0'}`} />
+
+                      <div className={`flex gap-6 lg:gap-8 transition-all duration-500 ${isActive ? 'translate-x-0 opacity-100' : '-translate-x-2 opacity-40 hover:opacity-70'}`}>
+                        {/* Number */}
+                        <div className="shrink-0 text-3xl font-[family-name:var(--font-display)] text-gold-dark/60 pt-1">
+                          {service.num}
+                        </div>
+                        
+                        {/* Content */}
+                        <div>
+                          <h3 className={`text-2xl lg:text-4xl font-[family-name:var(--font-display)] mb-4 transition-colors duration-500 ${isActive ? 'text-indigo-deep' : 'text-text-primary'}`}>
+                            {service.title}
+                          </h3>
+                          
+                          {/* Animated Description expansion on larger screens, just color fade on mobile */}
+                          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isActive ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 lg:max-h-40 lg:opacity-100'}`}>
+                            <p className="text-text-secondary leading-relaxed lg:text-lg max-w-xl">
+                              {service.description}
+                            </p>
+                            
+                            <div className={`mt-6 flex items-center gap-2 font-semibold tracking-wider text-sm uppercase transition-all duration-500 ${isActive ? 'text-gold opacity-100 translate-y-0' : 'text-transparent opacity-0 translate-y-4'}`}>
+                              <Link href="/services" className="inline-flex items-center gap-2 hover:text-indigo-deep transition-colors">
+                                Explore <ArrowRight size={16} />
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
+            </div>
+            
+          </div>
+
+          {/* View All */}
+          <AnimatedSection delay={0.2}>
+            <div className="mt-12 text-center">
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-indigo-deep text-white text-sm font-semibold hover:bg-indigo-dark shadow-lg shadow-indigo-deep/20 hover:shadow-xl hover:-translate-y-px transition-all duration-300"
+              >
+                View All Services
+                <ArrowRight size={15} />
+              </Link>
             </div>
           </AnimatedSection>
         </div>
       </section>
+
+
+      {/* ==================== BOTTOM CTA ==================== */}
+      <SovereignCTA
+        badgeText="Your Growth Partner"
+        title="Stop Worrying About Compliance."
+        description="Partner with Numerra and get back to building your business — while we ensure every number is in its place."
+        buttonText="Schedule a Free Consultation"
+        buttonHref="/free-consultation"
+      />
     </>
   );
 }
