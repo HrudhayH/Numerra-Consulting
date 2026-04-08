@@ -66,15 +66,13 @@ function FAQItem({ question, answer, index }: { question: string; answer: string
         </div>
         <ChevronDown
           size={20}
-          className={`text-text-secondary shrink-0 transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`text-text-secondary shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+            }`}
         />
       </button>
       <div
-        className={`overflow-hidden transition-all duration-300 ${
-          isOpen ? "max-h-40 pb-5" : "max-h-0"
-        }`}
+        className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-40 pb-5" : "max-h-0"
+          }`}
       >
         <p className="text-sm text-text-secondary leading-relaxed pl-10">{answer}</p>
       </div>
@@ -100,15 +98,37 @@ export function ContactContent() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormStatus("submitting");
 
-    setTimeout(() => {
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/hrudhay.2003@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || "Not provided",
+          message: formData.message,
+          _subject: `New Lead from Numerra Website: ${formData.name}`,
+          _template: "table",
+        }),
+      });
+
+      if (!response.ok) throw new Error("Submission failed");
+
       setFormStatus("success");
       setFormData({ name: "", email: "", phone: "", message: "" });
-      setTimeout(() => setFormStatus("idle"), 3000);
-    }, 1000);
+      setTimeout(() => setFormStatus("idle"), 5000);
+    } catch (error) {
+      console.error("Form submission error:", error);
+      alert("Something went wrong. Please try again or contact us directly.");
+      setFormStatus("idle");
+    }
   };
 
   return (
@@ -123,7 +143,7 @@ export function ContactContent() {
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="contact-grid" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" strokeWidth="1"/>
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" strokeWidth="1" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#contact-grid)" />
